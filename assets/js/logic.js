@@ -108,13 +108,18 @@ document.addEventListener("DOMContentLoaded", function () {
                 initials: initials,
                 score: timeRemaining
             };
-            const highscores = JSON.parse(localStorage.getItem("highscores"));
+            let highscores = JSON.parse(localStorage.getItem("highscores"));
+            
+            if (!highscores) {
+                highscores = [];
+            }
+    
             highscores.push(score);
-            highscores.sort((a, b) => (b.score) - (a.score));
+            highscores.sort((a, b) => b.score - a.score);
             localStorage.setItem("highscores", JSON.stringify(highscores));
             window.location.href = "highscores.html";
         } else {
-            alert("Please insert your initials:");
+            alert("Please insert your initials.");
         }
     }
 
