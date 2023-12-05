@@ -1,10 +1,14 @@
 document.addEventListener("DOMContentLoaded", function () {
     const startButton = document.getElementById("start");
     const timerElement = document.getElementById("time");
+    const questionTitleElement = document.getElementById("question-title");
+    const choicesElement = document.getElementById("choices");
     const questionsArray = questions; 
 
     let timer;
+    let currentQuestionIndex = 0;
     let timeRemaining;
+    const penaltyTime = 10;
 
     function startQuiz() {
         document.getElementById("start-screen").classList.add("hide");
@@ -22,11 +26,54 @@ document.addEventListener("DOMContentLoaded", function () {
                 timeRemaining = 0; 
                 endQuiz();
             } else {
-                timeRemaining--;
+                timeRemaining--; 
                 timerElement.textContent = timeRemaining;
             }
         }, 1000);
     }
+
+    function displayQuestion() {
+        const currentQuestion = questionsArray[currentQuestionIndex];
+
+        questionTitleElement.textContent = currentQuestion.question;
+        choicesElement.innerHTML = "";
+
+        currentQuestion.choices.forEach((choice, index) => {
+            const button = document.createElement("button");
+            button.textContent = choice;
+            button.addEventListener("click", () => handleAnswerClick(index));
+            choicesElement.appendChild(button);
+        });
+    }
+    function showFeedback(text) {
+        const feedbackElement = document.getElementById("feedback");
+        feedbackElement.textContent = text;
+
+        setTimeout(function () {
+            feedbackElement.textContent = "";
+        }, 1000);
+    }
+  function handleAnswerClick(choiceIndex) {
+        const currentQuestion = questionsArray[currentQuestionIndex];
+
+        if (currentQuestion.choices[choiceIndex] === currentQuestion.correctAnswer) {
+            document.getElementById("feedback").classList.remove("hide");
+            showFeedback("Correct!");
+        } else {
+            document.getElementById("feedback").classList.remove("hide");
+            showFeedback("Incorrect! -10 seconds");
+            timeRemaining -= penaltyTime;
+        }
+
+        currentQuestionIndex++;
+
+        if (currentQuestionIndex < questionsArray.length) {
+            displayQuestion();
+        } else {
+            endQuiz();
+        }
+    }
+    startButton.addEventListener("click", startQuiz);
 })
 // * A start button that when clicked a timer starts and the first question appears.
 //   * Questions contain buttons for each answer.
@@ -64,10 +111,10 @@ document.addEventListener("DOMContentLoaded", function () {
 // - When the user click on "Clear Highscores", clear local storage
 
 // How to use audio file
-const correctAudio = new Audio('./assets/sfx/correct.wav');
-const incorrectAudio = new Audio('./assets/sfx/incorrect.wav');
+// const correctAudio = new Audio('./assets/sfx/correct.wav');
+// const incorrectAudio = new Audio('./assets/sfx/incorrect.wav');
 
-// Example to play the audio when start button is clicked
-document.getElementById('start').addEventListener('click', function() {
-    incorrectAudio.play();
-});
+// // Example to play the audio when start button is clicked
+// document.getElementById('start').addEventListener('click', function() {
+//     incorrectAudio.play();
+// });
