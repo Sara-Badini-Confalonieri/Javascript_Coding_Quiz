@@ -18,7 +18,7 @@ function displayHighscores() {
 
     for (var i = 0; i < highscores.length; i++) {
         var scoreItem = document.createElement("li");
-        scoreItem.textContent = highscores.initials + ": " + highscores.score;
+        scoreItem.textContent = highscores[i].initials + ": " + highscores[i].score;
         highscoresList.appendChild(scoreItem);
     }
 }
