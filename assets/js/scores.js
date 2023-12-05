@@ -13,7 +13,10 @@ function displayHighscores() {
 
     // Sort highscores
     var highscoresList = document.getElementById("highscores");
-    highscores.sort((a, b) => b.score - a.score);
+    if (!highscores) {
+        highscores = [];
+    } else
+        highscores.sort((a, b) => b.score - a.score);
     highscoresList.innerHTML = "";
 
     for (var i = 0; i < highscores.length; i++) {
